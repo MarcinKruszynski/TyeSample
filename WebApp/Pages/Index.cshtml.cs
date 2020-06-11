@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using WebApp.Clients;
+using WebApp.Model;
 
 namespace WebApp.Pages
 {
@@ -12,14 +14,16 @@ namespace WebApp.Pages
     {
         private readonly ILogger<IndexModel> _logger;
 
+        public ProductItem[] Products { get; set; }
+
         public IndexModel(ILogger<IndexModel> logger)
         {
             _logger = logger;
         }
 
-        public void OnGet()
+        public async Task OnGet([FromServices]ProductsClient client)
         {
-
+            Products = await client.GetProductsAsync();
         }
     }
 }
