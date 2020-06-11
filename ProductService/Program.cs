@@ -1,11 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ProductService.Data;
+using ProductService.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ProductService
 {
@@ -13,14 +12,23 @@ namespace ProductService
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args);
+
+            host.MigrateDbContext<ProductContext>((context, services) =>
+                {                    
+                    var logger = services.GetService<ILogger<ProductContextSeed>>();
+
+                    new ProductContextSeed()
+                        .SeedAsync(context, logger)
+                        .Wait();
+                });
+            
+            host.Run();            
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+        private static IWebHost CreateHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)                             
+                .UseStartup<Startup>()                
+                .Build();        
     }
 }
