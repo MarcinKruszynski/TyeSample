@@ -1,0 +1,45 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: postgres
+  labels:
+    app.kubernetes.io/name: postgres
+    app.kubernetes.io/part-of: TyeSample
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: postgres
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: postgres
+        app.kubernetes.io/part-of: TyeSample
+    spec:
+      containers:
+        - name: postgres
+          image: postgres
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+          ports:
+            - containerPort: 5432
+          env:        
+            - name: POSTGRES_PASSWORD
+              value: "pass@word1"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  labels:
+    app.kubernetes.io/name: postgres
+    app.kubernetes.io/part-of: TyeSample
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app.kubernetes.io/name: postgres
