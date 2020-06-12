@@ -4,7 +4,7 @@ metadata:
   name: postgres
   labels:
     app.kubernetes.io/name: postgres
-    app.kubernetes.io/part-of: TyeSample
+    app.kubernetes.io/part-of: tyesample    
 spec:
   selector:
     matchLabels:
@@ -14,7 +14,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: postgres
-        app.kubernetes.io/part-of: TyeSample
+        app.kubernetes.io/part-of: tyesample
     spec:
       containers:
         - name: postgres
@@ -36,7 +36,7 @@ metadata:
   name: postgres
   labels:
     app.kubernetes.io/name: postgres
-    app.kubernetes.io/part-of: TyeSample
+    app.kubernetes.io/part-of: tyesample
 spec:
   ports:
     - port: 5432
